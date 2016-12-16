@@ -740,6 +740,8 @@ void cfgfile_save_options (struct zfile *f, struct uae_prefs *p, int type)
 	cfgfile_write (f, _T("key_for_quit"), _T("%d"), p->key_for_quit);
   cfgfile_write (f, _T("button_for_menu"), _T("%d"), p->button_for_menu);
 	cfgfile_write (f, _T("button_for_quit"), _T("%d"), p->button_for_quit);
+	cfgfile_write(f, _T("button_modifier"), _T("%d"), p->button_for_quit);
+	cfgfile_write(f, _T("key_modifier"), _T("%d"), p->button_for_quit);
 
   cfgfile_write (f, _T("gfx_framerate"), _T("%d"), p->gfx_framerate);
   write_resolution (f, _T("gfx_width"), _T("gfx_height"), &p->gfx_size); /* compatibility with old versions */
@@ -1290,6 +1292,12 @@ static int cfgfile_parse_host (struct uae_prefs *p, TCHAR *option, TCHAR *value)
 
 	if (cfgfile_intval (option, value, "button_for_quit", &p->button_for_quit, 1))
     return 1;
+
+	if (cfgfile_intval(option, value, "button_modifier", &p->button_modifier, 1))
+		return 1;
+
+	if (cfgfile_intval(option, value, "key_modifier", &p->key_modifier, 1))
+		return 1;
 	
 	if (_tcscmp (option, _T("gfx_width_windowed")) == 0) {
 		if (!_tcscmp (value, _T("native"))) {

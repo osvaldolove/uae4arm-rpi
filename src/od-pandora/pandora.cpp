@@ -44,6 +44,9 @@
 #include <SDL.h>
 #include "pandora_rp9.h"
 
+bool button_modifier_on = false;
+bool key_modifier_on = false;
+
 extern void signal_segv(int signum, siginfo_t* info, void*ptr);
 extern void gui_force_rtarea_hdchange(void);
 
@@ -884,12 +887,34 @@ int handle_msgpump(void)
 			break;
 
 		case SDL_JOYBUTTONDOWN:
-			if (rEvent.jbutton.button == currprefs.button_for_menu)
-				inputdevice_add_inputcode(AKS_ENTERGUI, 1);
-			if (rEvent.jbutton.button == currprefs.button_for_quit)
-				inputdevice_add_inputcode(AKS_QUIT, 1);
+			if (rEvent.jbutton.button == currprefs.button_modifier)
+			{
+				button_modifier_on = true;
+			}
+
+			if (currprefs.button_modifier != -1 && button_modifier_on)
+			{
+				if (rEvent.jbutton.button == currprefs.button_for_menu)
+					inputdevice_add_inputcode(AKS_ENTERGUI, 1);
+				if (rEvent.jbutton.button == currprefs.button_for_quit)
+					inputdevice_add_inputcode(AKS_QUIT, 1);
+			}
+			else
+			{
+				if (rEvent.jbutton.button == currprefs.button_for_menu)
+					inputdevice_add_inputcode(AKS_ENTERGUI, 1);
+				if (rEvent.jbutton.button == currprefs.button_for_quit)
+					inputdevice_add_inputcode(AKS_QUIT, 1);
+			}
+
 			break;
-	        
+	    
+		case SDL_JOYBUTTONUP:
+			if (rEvent.jbutton.button == currprefs.button_modifier)
+			{
+				button_modifier_on = false;
+			}
+
 		case SDL_KEYDOWN:
 			if (rEvent.key.keysym.sym == currprefs.key_for_menu)
 				inputdevice_add_inputcode(AKS_ENTERGUI, 1);

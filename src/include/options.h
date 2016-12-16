@@ -243,6 +243,8 @@ struct uae_prefs {
   int key_for_quit;
   int button_for_menu;
   int button_for_quit;
+  int key_modifier;
+  int button_modifier;
 
   /* input */
 
